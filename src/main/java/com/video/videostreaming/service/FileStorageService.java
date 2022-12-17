@@ -36,15 +36,17 @@ public class FileStorageService {
         return fileNameParts[fileNameParts.length -1];
     }
 
-    public String storeFile(MultipartFile file, String name){
+    public boolean storeFile(MultipartFile file, String name){
         String fileName = name + "." + getfileExtension(file.getOriginalFilename());
 
         try {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
+            return true;
         }catch (Exception e){
-            throw new RuntimeException("Could not store file " + fileName+ ". Please try again!", e);
+            log.error("Could not store file " + fileName+ ". Please try again!", e);
+            //throw new RuntimeException("Could not store file " + fileName+ ". Please try again!", e);
+            return false;
         }
     }
 

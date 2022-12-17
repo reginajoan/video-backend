@@ -18,4 +18,7 @@ public interface VideoRepo extends JpaRepository<Video, Long>{
 
     public List<Video> findAll();
 
+    @Query(value = "SELECT * FROM Video t WHERE t.secure_id=?1", nativeQuery = true)
+    public Video findBySecureId(String secureId);
+
 }

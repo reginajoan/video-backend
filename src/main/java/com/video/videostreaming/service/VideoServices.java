@@ -1,6 +1,7 @@
 package com.video.videostreaming.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,20 @@ import reactor.core.publisher.Mono;
 public interface VideoServices {
     Mono<Resource> getVideo(String name);
 
-    void saveVideo(MultipartFile file, Video video);
+    Object saveVideo(MultipartFile file, Video video);
+
+    Object save(MultipartFile file, String data);
 
     List<String> getAllVideoNames();
 
     List<Video> findAll();
 
     boolean deleteVideo(String videoName);
+
+    Video findBySecureId(String uuid);
+
+    Optional<Video> findById(Long id);
+
+    Video saveWithGenreBook(MultipartFile file, String data);
+
 }

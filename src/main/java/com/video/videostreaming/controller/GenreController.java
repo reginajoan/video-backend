@@ -1,7 +1,5 @@
 package com.video.videostreaming.controller;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,87 +11,79 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.video.videostreaming.dto.CategoryRequestDTO;
+import com.video.videostreaming.dto.GenreRequestDTO;
 import com.video.videostreaming.dto.ResponseData;
-import com.video.videostreaming.model.entity.Category;
-import com.video.videostreaming.service.CategoryService;
-import com.video.videostreaming.service.VideoServices;
+import com.video.videostreaming.model.entity.Genre;
+import com.video.videostreaming.service.GenreService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
-@RequestMapping("api/category/v1")
-public class CategoryController {
+@RequestMapping("api/genre/v1")
+public class GenreController {
     
     @Autowired
-    private VideoServices videoServices;
+    private GenreService genreService;
 
-    @Autowired
-    private CategoryService categoryService;
-
-    @GetMapping("/all")
+    @GetMapping("/findAll")
     public ResponseEntity<?> findAll(){
         ResponseData response = new ResponseData();
         try {
             response.setStatus(true);
-            response.setPayload(categoryService.findAll());
-            response.getMessage().add("All Category");
+            response.getMessage().add("success to get all data");
+            response.setPayload(genreService.findAll());
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             response.setStatus(false);
-            response.getMessage().add("Fail to get All Category");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-    }
-
-    @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody CategoryRequestDTO cDto){
-        ResponseData response = new ResponseData();
-        try {
-            Category category = new Category();
-            category.setCategory(cDto.getCategory());
-            category.setSecureId(UUID.randomUUID().toString());
-            // log.info("# findBy : {}", videoServices.findById(Long.parseLong(cDto.getVideo())).get());
-            // category.setVideo(videoServices.findById(Long.parseLong(cDto.getVideo())).get());
-            response.setStatus(true);
-            response.getMessage().add("Success save category");
-            response.setPayload(categoryService.save(category));
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            response.setStatus(false);
-            response.getMessage().add("Failed to save new category, error : " + e.getMessage());
+            response.getMessage().add("error get data : " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<?> findCategoryById(@PathVariable Long id){
+    @PostMapping("/save")
+    public ResponseEntity<?> createOne(@RequestBody GenreRequestDTO genreRequestDTO){
         ResponseData response = new ResponseData();
         try {
+            Genre genre = new Genre();
+            genre.setGenreName(genreRequestDTO.getGenreName());
             response.setStatus(true);
-            response.getMessage().add("Success to get data by id : " + id);
-            response.setPayload(categoryService.findById(id));
+            response.getMessage().add("success to save data");
+            response.setPayload(genreService.save(genre));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             response.setStatus(false);
-            response.getMessage().add("Fail to get data by id : " + id);
+            response.getMessage().add("error get data : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<?> findById(@PathVariable("id") Long id){
+        ResponseData response = new ResponseData();
+        try {
+            response.setStatus(true);
+            response.getMessage().add("find by id : " + id);
+            response.setPayload(genreService.findById(id));
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            response.setStatus(false);
+            response.getMessage().add("error get data : " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id){
+    public ResponseEntity<?> deleteById(@PathVariable("id") Long id){
         ResponseData response = new ResponseData();
         try {
             response.setStatus(true);
-            response.getMessage().add("Success to delete category id : " + id);
-            categoryService.delete(id);
+            response.getMessage().add("find by id : " + id);
+            genreService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             response.setStatus(false);
-            response.getMessage().add("Fail to delete category id : " + id);
+            response.getMessage().add("error get data : " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+
     }
+
 }
