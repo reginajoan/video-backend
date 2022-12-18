@@ -17,7 +17,6 @@ import com.video.videostreaming.dto.CategoryRequestDTO;
 import com.video.videostreaming.dto.ResponseData;
 import com.video.videostreaming.model.entity.Category;
 import com.video.videostreaming.service.CategoryService;
-import com.video.videostreaming.service.VideoServices;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,9 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("api/category/v1")
 public class CategoryController {
     
-    @Autowired
-    private VideoServices videoServices;
-
     @Autowired
     private CategoryService categoryService;
 
@@ -54,8 +50,6 @@ public class CategoryController {
             Category category = new Category();
             category.setCategory(cDto.getCategory());
             category.setSecureId(UUID.randomUUID().toString());
-            // log.info("# findBy : {}", videoServices.findById(Long.parseLong(cDto.getVideo())).get());
-            // category.setVideo(videoServices.findById(Long.parseLong(cDto.getVideo())).get());
             response.setStatus(true);
             response.getMessage().add("Success save category");
             response.setPayload(categoryService.save(category));

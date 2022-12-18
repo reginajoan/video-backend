@@ -2,7 +2,6 @@ package com.video.videostreaming.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.video.videostreaming.model.entity.Genre;
@@ -17,5 +16,7 @@ public interface GenreService {
     public Optional<Genre> findById(Long id);
 
     public void delete(Long id);
+
+    public boolean updateWGenreBooks(Long id, Genre genre);
 
 }

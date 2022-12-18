@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -41,17 +40,6 @@ public class Video implements Serializable {
 
     @Column(unique = true, nullable = false)
     private String secureId;
-
-    // @Column(name = "category")
-    // @OneToMany(targetEntity = Category.class, cascade = CascadeType.ALL, mappedBy = "category")
-    // private List<Category> category;
-
-    // @Lob
-    // private Category[] categories;
-
-    // @ManyToOne
-    // private Genre genre;
-
 
     @ManyToOne
     private Category category;
