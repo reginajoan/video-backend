@@ -35,6 +35,7 @@ public class GenreBookController {
         }
     }
 
+    @GetMapping("/genre-book")
     public ResponseEntity<?> findAll(){
         ResponseData response = new ResponseData();
         try {
