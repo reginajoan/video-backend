@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.video.videostreaming.model.entity.Genre;
-import com.video.videostreaming.model.entity.GenreBook;
 import com.video.videostreaming.model.repository.GenreRepository;
 import com.video.videostreaming.service.GenreBookService;
 import com.video.videostreaming.service.GenreService;

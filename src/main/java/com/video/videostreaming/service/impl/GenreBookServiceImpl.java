@@ -42,7 +42,6 @@ public class GenreBookServiceImpl implements GenreBookService  {
 
     @Override
     public void updateGenreNameByGenreId(String genreName, Long id) {
-        // TODO Auto-generated method stub
         genreBookRepo.updateGenreNameByGenreId(genreName, id);
     }
     
