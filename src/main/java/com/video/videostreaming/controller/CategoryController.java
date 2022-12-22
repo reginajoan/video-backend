@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("api/category/v1")
+@PreAuthorize("isAuthenticated()")
 public class CategoryController {
     
     @Autowired
@@ -32,6 +34,7 @@ public class CategoryController {
     public ResponseEntity<?> findAll(){
         ResponseData response = new ResponseData();
         try {
+            log.info("# => this is Category Controller Find All");
             response.setStatus(true);
             response.setPayload(categoryService.findAll());
             response.getMessage().add("All Category");

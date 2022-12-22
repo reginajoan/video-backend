@@ -13,14 +13,14 @@ public class VideoStreamingApplication {
 		SpringApplication.run(VideoStreamingApplication.class, args);
 	}
 
-	@Bean
-    public WebMvcConfigurer cors(){
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
-            }
-        };
-    }
+	// @Bean
+    // public WebMvcConfigurer cors(){
+    //     return new WebMvcConfigurer() {
+    //         @Override
+    //         public void addCorsMappings(CorsRegistry registry) {
+    //             registry.addMapping("/**").allowedOrigins("*");
+    //         }
+    //     };
+    // }
 
 }

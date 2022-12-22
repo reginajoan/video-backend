@@ -116,9 +116,6 @@ public class VideoServicesImpl implements VideoServices {
             video.setName(videoRequestDTO.getName());
             video.setDescription(videoRequestDTO.getDescription());
             video.setSecureId(UUID.randomUUID().toString());
-            // video.setCategory(listOfData);
-            // video.setCategories(categories);
-            // video.setGenre(genreService.findById(Long.parseLong(videoRequestDTO.getGenre())).get());
 
             video.setVideoSaved(fileStorageService.storeFile(file, video.getName()));
             return repo.saveAndFlush(video);
