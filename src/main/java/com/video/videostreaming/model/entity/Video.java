@@ -22,9 +22,7 @@ import lombok.Data;
 @Data
 @Entity
 public class Video implements Serializable {
-
     private static final long serialVersionUID=1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,9 +38,10 @@ public class Video implements Serializable {
 
     @Column(unique = true, nullable = false)
     private String secureId;
-
     @ManyToOne
     private Category category;
+    @ManyToOne
+    private Comment comment;
     
     @OneToMany(targetEntity = GenreBook.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_book", referencedColumnName = "id")
@@ -55,6 +54,5 @@ public class Video implements Serializable {
     public void setTimestamp(){
         setCreateAt(new Date());
     }
-
 
 }

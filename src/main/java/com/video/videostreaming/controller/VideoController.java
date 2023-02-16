@@ -7,16 +7,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api/video/v1")
 public class VideoController {
@@ -40,9 +31,11 @@ public class VideoController {
     @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> saveVideoUpdate(@RequestPart("file") MultipartFile file, @RequestPart("videoDTO") String videoDTO) throws IOException {
         ResponseData response = new ResponseData();
+        log.info("file : " + file);
+        log.info("video : " + videoDTO);
         try {
             Object object = videoServices.saveWithGenreBook(file, videoDTO);
-            if(object != null){
+            if(!object.equals(null)){
                 response.setStatus(true);
                 response.setPayload(object);
                 response.getMessage().add("Video saved successfully");
@@ -50,7 +43,7 @@ public class VideoController {
             }else{
                 response.setStatus(false);
                 response.setPayload(object);
-                response.getMessage().add("error saved video : ");
+                response.getMessage().add("cannot save video : " + object);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
         } catch (Exception e) {
@@ -61,9 +54,9 @@ public class VideoController {
     }
 
     @GetMapping(value = "/video/{title}", produces = "video/mp4")
-    public Mono<Resource> getVideo(@PathVariable String title, @RequestHeader("Range") String range){
+    public Mono<Resource> getVideo(@PathVariable String title){
         System.out.println("title : " + title);
-        System.out.println("range : " + range);
+        //System.out.println("range : " + range);
         return videoServices.getVideo(title);
     }
 

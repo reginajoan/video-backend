@@ -25,7 +25,7 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String roles;
 
-    
+
 
     public UserDetailsImpl(String username, String email, String nama, String password, String roles) {
         this.username = username;
@@ -34,15 +34,13 @@ public class UserDetailsImpl implements UserDetails {
         this.password = password;
         this.roles = roles;
     }
-
     public static UserDetailsImpl build(Pengguna pengguna){
-        return new UserDetailsImpl(pengguna.getId(), 
-                    pengguna.getEmail(), 
-                    pengguna.getNama(), 
-                    pengguna.getPassword(), 
+        return new UserDetailsImpl(pengguna.getSecureId(),
+                    pengguna.getEmail(),
+                    pengguna.getNama(),
+                    pengguna.getPassword(),
                     pengguna.getPassword());
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -78,5 +76,5 @@ public class UserDetailsImpl implements UserDetails {
         // TODO Auto-generated method stub
         return true;
     }
-    
+
 }

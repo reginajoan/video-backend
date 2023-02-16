@@ -14,14 +14,10 @@ import lombok.Data;
 @Table(name = "genre_book")
 @Entity
 public class GenreBook implements Serializable {
-
     private static final long serialVersionUID=1L;
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long genreId;
     private String genreName;
-
-
 }

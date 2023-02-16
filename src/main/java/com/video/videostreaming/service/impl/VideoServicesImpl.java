@@ -132,6 +132,7 @@ public class VideoServicesImpl implements VideoServices {
         VideoRequestDTO videoRequestDTO = new VideoRequestDTO();
         List<GenreBook> listGenreBooks = new ArrayList<>();
         log.info("# data videoDTO : {}", videoDTO);
+        log.info("# data file : {}", file);
         try {
             videoRequestDTO = objectMapper.readValue(videoDTO, VideoRequestDTO.class);
             String[] splitCategory = videoRequestDTO.getGenre().split(",");
@@ -143,13 +144,16 @@ public class VideoServicesImpl implements VideoServices {
             video.setCategory(categoryService.findById(Long.parseLong(videoRequestDTO.getCategory())));
             log.info("# before save data listGenreBooks : {}", listGenreBooks);
             video.setGenreBooks(listGenreBooks);
-
+            log.info("# file : {}", file);
+            log.info("# fileName : {}",video.getName());
             video.setVideoSaved(fileStorageService.storeFile(file, video.getName()));
             return repo.save(video);
         } catch (JsonMappingException e) {
             e.printStackTrace();
+            log.info("JsonMappingException e : {}",e.getMessage());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            log.info("JsonProcessingException e : {}", e.getMessage());
         }
         return null;
     }
@@ -172,15 +176,22 @@ public class VideoServicesImpl implements VideoServices {
             return null;
         }
         for(String arr : arrs){
-            Genre genre = genreService.findById(Long.parseLong(arr)).get();
 
-            if(!genre.equals(null)){
-                GenreBook gb = new GenreBook();
-                gb.setGenreId(genre.getId());
-                gb.setGenreName(genre.getGenreName());
-                datas.add(gb);
+            List<Long> ids = genreService.findIdAll();
+            for(Long id : ids){
+                if(Long.parseLong(arr) == id){
+                    Genre genre = genreService.findById((Long)id).get();
+                    if(!genre.equals(null)){
+                        GenreBook gb = new GenreBook();
+                        gb.setGenreId(genre.getId());
+                        gb.setGenreName(genre.getGenreName());
+                        datas.add(gb);
+                    }
+                }
             }
         }
+
+
         return datas;
     }
 }

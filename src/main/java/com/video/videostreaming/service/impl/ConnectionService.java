@@ -8,9 +8,11 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class ConnectionService {
     
@@ -29,7 +31,6 @@ public class ConnectionService {
     public Map<String, String> view(){
         Map<String, String> listGenre = new HashMap<>();
         try{
-            
             String Sql="SELECT * FROM genre";
             Statement stmt = connection().createStatement();
             ResultSet rs=stmt.executeQuery(Sql);
@@ -38,9 +39,10 @@ public class ConnectionService {
                 listGenre.put(rs.getString("id"), rs.getString("genre_name"));
             }
         }catch(Exception e){
-            System.err.println(e);
-            return null;
+            log.error("error load data : {}", e.getMessage());
+            listGenre.put("error ", e.getMessage());
         }
         return listGenre;
     }
+
 }

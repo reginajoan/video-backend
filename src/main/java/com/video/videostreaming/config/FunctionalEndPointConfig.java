@@ -18,17 +18,17 @@ public class FunctionalEndPointConfig {
 
     private VideoServices service;
 
-    @Bean
-    public RouterFunction<ServerResponse> router(){
-        return RouterFunctions.route()
-                .GET("fun-ep/video/{title}", this::videoHandler)
-                .build();
-    }
-
-    private Mono<ServerResponse> videoHandler(ServerRequest serverRequest){
-        String title = serverRequest.pathVariable("title");
-        return ServerResponse.ok()
-                .contentType(MediaType.valueOf("video/mp4"))
-                .body(this.service.getVideo(title), Resource.class);
-    }
+//    @Bean
+//    public RouterFunction<ServerResponse> router(){
+//        return RouterFunctions.route()
+//                .GET("fun-ep/video/{title}", this::videoHandler)
+//                .build();
+//    }
+//
+//    private Mono<ServerResponse> videoHandler(ServerRequest serverRequest){
+//        String title = serverRequest.pathVariable("title");
+//        return ServerResponse.ok()
+//                .contentType(MediaType.valueOf("video/mp4"))
+//                .body(this.service.getVideo(title), Resource.class);
+//    }
 }

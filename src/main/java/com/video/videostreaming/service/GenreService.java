@@ -19,4 +19,6 @@ public interface GenreService {
 
     public boolean updateWGenreBooks(Long id, Genre genre);
 
+    public List<Long> findIdAll();
+
 }

@@ -29,6 +29,9 @@ public class CategoryController {
     
     @Autowired
     private CategoryService categoryService;
+    //@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+
 
     @GetMapping("/all")
     public ResponseEntity<?> findAll(){

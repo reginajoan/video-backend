@@ -1,6 +1,8 @@
 package com.video.videostreaming.security.jwt;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -19,7 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class JwtUtils {
-    
+
+    @Value("${jwt.refreshExpirationMs}")
+    private int refreshJwtExpirationMs;
     @Value("${jwt.expirationMs}")
     private int jwtExpirationMs;
 
@@ -27,6 +31,7 @@ public class JwtUtils {
     private String jwtSecret;
 
     public boolean validateJwtToken(String authToken){
+        log.info("package JwtUtils authToken : {}", authToken);
         try {
             Jwts.parser().setSigningKey(jwtSecret)
                         .parseClaimsJws(authToken);
@@ -48,11 +53,22 @@ public class JwtUtils {
 
     public String generateJwtToken(Authentication authentication){
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username",principal.getUsername());
         return Jwts.builder().setSubject((principal.getUsername()))
-        .setIssuedAt(new Date())
-        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-        .signWith(SignatureAlgorithm.HS512, jwtSecret)
-        .compact();
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
+    public String generateRefresJwtToken(Authentication authentication) {
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        return Jwts.builder().setSubject((principal.getUsername()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + refreshJwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
     }
 
     public String getUserNameFromJwtToken(String token){

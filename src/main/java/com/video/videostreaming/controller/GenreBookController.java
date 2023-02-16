@@ -1,8 +1,10 @@
 package com.video.videostreaming.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +16,11 @@ import com.video.videostreaming.service.GenreBookService;
 @RestController
 @RequestMapping("/api/genre_book/v1")
 public class GenreBookController {
-    
     @Autowired
     private GenreBookService bookService;
 
     @GetMapping("/genre-book/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<?> findByGenreId(@PathVariable("id") Long id){
         ResponseData response = new ResponseData();
         try {

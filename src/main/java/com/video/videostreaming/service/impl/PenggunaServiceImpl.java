@@ -18,7 +18,7 @@ public class PenggunaServiceImpl implements PenggunaService {
     private PenggunaRepo penggunaRepo;
     @Override
     public Pengguna findById(String id) {
-        return penggunaRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pengguna dengan id " + id + " tidak ditemukan"));
+        return penggunaRepo.findbySecureId(id);//.orElseThrow(() -> new ResourceNotFoundException("Pengguna dengan id " + id + " tidak ditemukan"));
     }
 
     @Override
@@ -28,21 +28,21 @@ public class PenggunaServiceImpl implements PenggunaService {
 
     @Override
     public Pengguna create(Pengguna pengguna) {
-        if (!StringUtils.hasText(pengguna.getId())) {
-            throw new BadRequestException("Username harus diisi");
-        }
-
-        if (penggunaRepo.existsById(pengguna.getId())) {
-            throw new BadRequestException("Username " + pengguna.getId() + " sudah terdaftar");
-        }
-
-        if (!StringUtils.hasText(pengguna.getEmail())) {
-            throw new BadRequestException("Email harus diisi");
-        }
-
-        if (penggunaRepo.existsByEmail(pengguna.getEmail())) {
-            throw new BadRequestException("Email " + pengguna.getEmail() + " sudah terdaftar");
-        }
+//        if (!StringUtils.hasText(pengguna.getSecureId())) {
+//            throw new BadRequestException("Username harus diisi");
+//        }
+//
+//        if (penggunaRepo.existsById(pengguna.getId())) {
+//            throw new BadRequestException("Username " + pengguna.getId() + " sudah terdaftar");
+//        }
+//
+//        if (!StringUtils.hasText(pengguna.getEmail())) {
+//            throw new BadRequestException("Email harus diisi");
+//        }
+//
+//        if (penggunaRepo.existsByEmail(pengguna.getEmail())) {
+//            throw new BadRequestException("Email " + pengguna.getEmail() + " sudah terdaftar");
+//        }
 
         pengguna.setIsAktif(true);
         return penggunaRepo.save(pengguna);
@@ -50,7 +50,7 @@ public class PenggunaServiceImpl implements PenggunaService {
 
     @Override
     public Pengguna edit(Pengguna pengguna) {
-        if (!StringUtils.hasText(pengguna.getId())) {
+        if (!StringUtils.hasText(pengguna.getSecureId())) {
             throw new BadRequestException("Username harus diisi");
         }
 
@@ -62,7 +62,7 @@ public class PenggunaServiceImpl implements PenggunaService {
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(Long id) {
         penggunaRepo.deleteById(id);
     }
 }

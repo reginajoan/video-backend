@@ -7,9 +7,9 @@ import java.util.List;
 
 @Service
 public interface PenggunaService {
-    public Pengguna findById(String id);
-    public List<Pengguna> findAll();
-    public Pengguna create(Pengguna pengguna);
-    public Pengguna edit(Pengguna pengguna);
-    public void deleteById(String id);
+    Pengguna findById(String id);
+    List<Pengguna> findAll();
+    Pengguna create(Pengguna pengguna);
+    Pengguna edit(Pengguna pengguna);
+    void deleteById(Long id);
 }

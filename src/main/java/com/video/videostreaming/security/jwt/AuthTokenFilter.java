@@ -25,7 +25,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtils jwtUtils;
-    
+
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -35,6 +35,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         // TODO Auto-generated method stub
         try {
             String jwt = parseJwt(request);
+            log.info("jwt : {}",jwt);
             if(jwt != null && jwtUtils.validateJwtToken(jwt)){
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
                 UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
@@ -56,5 +57,5 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
         return null;
     }
-    
+
 }

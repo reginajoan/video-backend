@@ -3,7 +3,10 @@ package com.video.videostreaming.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.video.videostreaming.model.repository.GenreBookRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.video.videostreaming.model.entity.Genre;
@@ -16,13 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class GenreServiceImpl implements GenreService {
-
+    @Autowired
+    private GenreBookRepo genreBookRepo;
     @Autowired
     private GenreRepository repository;
-
     @Autowired
     private GenreBookService gBookService;
-
     @Override
     public List<Genre> findAll() {
         return repository.findAll();
@@ -58,5 +60,10 @@ public class GenreServiceImpl implements GenreService {
         Integer update = repository.updateGenreName(genre.getGenreName(), id);
         return update==1 ? true : false;
     }
-    
+
+    @Override
+    public List<Long> findIdAll() {
+        return repository.findIdAll();
+    }
+
 }

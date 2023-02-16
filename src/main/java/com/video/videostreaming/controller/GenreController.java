@@ -125,4 +125,18 @@ public class GenreController {
 
     }
 
+    @GetMapping("/findAllId")
+    public ResponseEntity<?> findAllId(){
+        ResponseData response = new ResponseData();
+        try {
+            response.setStatus(true);
+            response.getMessage().add("find all id");
+            response.setPayload(genreService.findIdAll());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            response.setStatus(false);
+            response.getMessage().add("error get data : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
 }
