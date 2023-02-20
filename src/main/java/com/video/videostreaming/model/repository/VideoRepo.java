@@ -2,6 +2,8 @@ package com.video.videostreaming.model.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,7 +16,7 @@ public interface VideoRepo extends JpaRepository<Video, Long>{
     public boolean existsByName(String name);
 
     @Query(nativeQuery = true, value = "SELECT name FROM video")
-    public List<String> getAllEntryNames();
+    public Page<String> getAllEntryNames(Pageable pageable);
 
     public List<Video> findAll();
 

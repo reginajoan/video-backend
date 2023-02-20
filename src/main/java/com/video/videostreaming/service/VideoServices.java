@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,9 +21,9 @@ public interface VideoServices {
 
     Object save(MultipartFile file, String data);
 
-    List<String> getAllVideoNames();
+    Page<String> getAllVideoNames(Pageable pageable);
 
-    List<Video> findAll();
+    Page<Video> findAll(Pageable pageable);
 
     boolean deleteVideo(String videoName);
 
@@ -30,5 +32,7 @@ public interface VideoServices {
     Optional<Video> findById(Long id);
 
     Video saveWithGenreBook(MultipartFile file, String data);
+
+    Video updateBook(MultipartFile file, String data);
 
 }

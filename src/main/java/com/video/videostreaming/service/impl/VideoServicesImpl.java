@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.video.videostreaming.model.entity.GenreMovie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +21,6 @@ import com.video.videostreaming.dto.VideoRequestDTO;
 import com.video.videostreaming.exception.VideoNotFoundException;
 import com.video.videostreaming.model.entity.Category;
 import com.video.videostreaming.model.entity.Genre;
-import com.video.videostreaming.model.entity.GenreBook;
 import com.video.videostreaming.model.entity.Video;
 import com.video.videostreaming.model.repository.VideoRepo;
 import com.video.videostreaming.service.CategoryService;
@@ -77,13 +79,13 @@ public class VideoServicesImpl implements VideoServices {
     }
 
     @Override
-    public List<String> getAllVideoNames() {
-        return repo.getAllEntryNames();
+    public Page<String> getAllVideoNames(Pageable pageable) {
+        return repo.getAllEntryNames(pageable);
     }
 
     @Override
-    public List<Video> findAll() {
-        return repo.findAll();
+    public Page<Video> findAll(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     @Override
@@ -130,20 +132,20 @@ public class VideoServicesImpl implements VideoServices {
     public Video saveWithGenreBook(MultipartFile file, String videoDTO){
         ObjectMapper objectMapper = new ObjectMapper();
         VideoRequestDTO videoRequestDTO = new VideoRequestDTO();
-        List<GenreBook> listGenreBooks = new ArrayList<>();
+        List<GenreMovie> listGenreMovies = new ArrayList<>();
         log.info("# data videoDTO : {}", videoDTO);
         log.info("# data file : {}", file);
         try {
             videoRequestDTO = objectMapper.readValue(videoDTO, VideoRequestDTO.class);
             String[] splitCategory = videoRequestDTO.getGenre().split(",");
-            listGenreBooks = getListDataGenre(splitCategory);
+            listGenreMovies = getListDataGenre(splitCategory);
             Video video = new Video();
             video.setName(videoRequestDTO.getName());
             video.setDescription(videoRequestDTO.getDescription());
             video.setSecureId(UUID.randomUUID().toString());
             video.setCategory(categoryService.findById(Long.parseLong(videoRequestDTO.getCategory())));
-            log.info("# before save data listGenreBooks : {}", listGenreBooks);
-            video.setGenreBooks(listGenreBooks);
+            log.info("# before save data listGenreBooks : {}", listGenreMovies);
+            video.setGenreBooks(listGenreMovies);
             log.info("# file : {}", file);
             log.info("# fileName : {}",video.getName());
             video.setVideoSaved(fileStorageService.storeFile(file, video.getName()));
@@ -158,6 +160,43 @@ public class VideoServicesImpl implements VideoServices {
         return null;
     }
 
+    @Override
+    public Video updateBook(MultipartFile file, String videoDTO) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        VideoRequestDTO videoRequestDTO = new VideoRequestDTO();
+        List<GenreMovie> listGenreMovies = new ArrayList<>();
+        log.info("# data videoDTO : {}", videoDTO);
+        log.info("# data file : {}", file);
+        Video video = new Video();
+        try {
+            videoRequestDTO = objectMapper.readValue(videoDTO, VideoRequestDTO.class);
+            String[] splitCategory = videoRequestDTO.getGenre().split(",");
+            listGenreMovies = getListDataGenre(splitCategory);
+
+            video.setName(videoRequestDTO.getName());
+            video.setDescription(videoRequestDTO.getDescription());
+            video.setSecureId(UUID.randomUUID().toString());
+            video.setCategory(categoryService.findById(Long.parseLong(videoRequestDTO.getCategory())));
+            log.info("# before save data listGenreBooks : {}", listGenreMovies);
+            video.setGenreBooks(listGenreMovies);
+            log.info("# file : {}", file);
+            log.info("# fileName : {}",video.getName());
+            video.setVideoSaved(fileStorageService.storeFile(file, video.getName()));
+
+            if(!repo.existsByName(video.getName())){
+                video = repo.save(video);
+            }
+            return video;
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+            log.info("JsonMappingException e : {}",e.getMessage());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            log.info("JsonProcessingException e : {}", e.getMessage());
+        }
+        return video;
+    }
+
     List<Category> getListDataCategory(String[] arr){
         List<Category> list = new ArrayList<>();
         if(arr.length == 0){
@@ -169,8 +208,8 @@ public class VideoServicesImpl implements VideoServices {
         return list;
     }
 
-    List<GenreBook> getListDataGenre(String[] arrs){
-        List<GenreBook> datas = new ArrayList<>();
+    List<GenreMovie> getListDataGenre(String[] arrs){
+        List<GenreMovie> datas = new ArrayList<>();
         
         if(arrs.length < 0){
             return null;
@@ -182,10 +221,10 @@ public class VideoServicesImpl implements VideoServices {
                 if(Long.parseLong(arr) == id){
                     Genre genre = genreService.findById((Long)id).get();
                     if(!genre.equals(null)){
-                        GenreBook gb = new GenreBook();
-                        gb.setGenreId(genre.getId());
-                        gb.setGenreName(genre.getGenreName());
-                        datas.add(gb);
+                        GenreMovie gm = new GenreMovie();
+                        gm.setGenreId(genre.getId());
+                        gm.setGenreName(genre.getGenreName());
+                        datas.add(gm);
                     }
                 }
             }

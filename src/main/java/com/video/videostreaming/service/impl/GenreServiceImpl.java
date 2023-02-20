@@ -3,15 +3,13 @@ package com.video.videostreaming.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import com.video.videostreaming.model.repository.GenreBookRepo;
+import com.video.videostreaming.model.repository.GenreMovieRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.video.videostreaming.model.entity.Genre;
 import com.video.videostreaming.model.repository.GenreRepository;
-import com.video.videostreaming.service.GenreBookService;
+import com.video.videostreaming.service.GenreMovieService;
 import com.video.videostreaming.service.GenreService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class GenreServiceImpl implements GenreService {
     @Autowired
-    private GenreBookRepo genreBookRepo;
+    private GenreMovieRepo genreMovieRepo;
     @Autowired
     private GenreRepository repository;
     @Autowired
-    private GenreBookService gBookService;
+    private GenreMovieService genreMovieService;
     @Override
     public List<Genre> findAll() {
         return repository.findAll();
@@ -51,7 +49,7 @@ public class GenreServiceImpl implements GenreService {
         //public List<GenreBook> findByGenreId(Long id);
         //List<GenreBook> genreBooks = gBookService.findByGenreId(id);
         log.info("# genre : {}", genre);
-        gBookService.updateGenreNameByGenreId(genre.getGenreName(), id);
+        genreMovieService.updateGenreNameByGenreId(genre.getGenreName(), id);
         //log.info("# gb : {}",gBookService.updateGenreNameByGenreId(genre.getGenreName(), id));
         Genre genre2 = new Genre();
         

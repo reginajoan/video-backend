@@ -38,14 +38,16 @@ public class Video implements Serializable {
 
     @Column(unique = true, nullable = false)
     private String secureId;
+
     @ManyToOne
     private Category category;
+
     @ManyToOne
     private Comment comment;
     
-    @OneToMany(targetEntity = GenreBook.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_book", referencedColumnName = "id")
-    private List<GenreBook> genreBooks;
+    @OneToMany(targetEntity = GenreMovie.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_movie", referencedColumnName = "id")
+    private List<GenreMovie> genreBooks;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;

@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +56,31 @@ public class VideoController {
         }
     }
 
+    @PutMapping(value = "/update-new", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> updateVideoNew(@RequestPart("file") MultipartFile file, @RequestPart("videoDTO") String videoDTO) throws IOException {
+        ResponseData response = new ResponseData();
+        log.info("file : " + file);
+        log.info("video : " + videoDTO);
+        try {
+            Object object = videoServices.updateBook(file, videoDTO);
+            if(!object.equals(null)){
+                response.setStatus(true);
+                response.setPayload(object);
+                response.getMessage().add("Video saved successfully");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }else{
+                response.setStatus(false);
+                response.setPayload(object);
+                response.getMessage().add("cannot save video : " + object);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+        } catch (Exception e) {
+            response.setStatus(false);
+            response.getMessage().add("error saved video : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
     @GetMapping(value = "/video/{title}", produces = "video/mp4")
     public Mono<Resource> getVideo(@PathVariable String title){
         System.out.println("title : " + title);
@@ -78,11 +106,12 @@ public class VideoController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllVideoNames(){
+        Pageable pageable = PageRequest.of(0, 100);
         ResponseData response = new ResponseData();
         try {
             response.setStatus(true);
             response.getMessage().add("successfully get all video names");
-            response.setPayload(videoServices.getAllVideoNames());
+            response.setPayload(videoServices.getAllVideoNames(pageable));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             response.setStatus(false);
@@ -93,11 +122,12 @@ public class VideoController {
 
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll(){
+        Pageable pageable = PageRequest.of(0,100);
         ResponseData response = new ResponseData();
         try {
             response.setStatus(true);
             response.getMessage().add("successfully get all video");
-            response.setPayload(videoServices.findAll());
+            response.setPayload(videoServices.findAll(pageable));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             response.setStatus(false);

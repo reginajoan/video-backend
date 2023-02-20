@@ -1,5 +1,6 @@
 package com.video.videostreaming.controller;
 
+import java.awt.print.Pageable;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("api/category/v1")
-@PreAuthorize("isAuthenticated()")
+//@PreAuthorize("isAuthenticated()")
 public class CategoryController {
     
     @Autowired
