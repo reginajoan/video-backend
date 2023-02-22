@@ -32,7 +32,11 @@ public interface VideoServices {
     Optional<Video> findById(Long id);
 
     Video saveWithGenreBook(MultipartFile file, String data);
+    Page<Video> findSpecification(String name, String description, Pageable pageable);
 
     Video updateBook(MultipartFile file, String data);
 
+    List<Video> findByNameContainingIgnoreCaseAndDescriptionContainingIgnoreCaseOrderByName(String name, String description);
+
+    List<Video> findTop20ByNameContainingIgnoreCaseOrderByNameAsc(String name);
 }

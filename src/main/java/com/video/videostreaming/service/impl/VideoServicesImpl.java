@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.video.videostreaming.model.entity.GenreMovie;
+import com.video.videostreaming.utils.VIDSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -161,6 +162,11 @@ public class VideoServicesImpl implements VideoServices {
     }
 
     @Override
+    public Page<Video> findSpecification(String name, String description, Pageable pageable) {
+        return repo.findAll(VIDSpec.findCriteria(name, description), pageable);
+    }
+
+    @Override
     public Video updateBook(MultipartFile file, String videoDTO) {
         ObjectMapper objectMapper = new ObjectMapper();
         VideoRequestDTO videoRequestDTO = new VideoRequestDTO();
@@ -197,6 +203,16 @@ public class VideoServicesImpl implements VideoServices {
         return video;
     }
 
+    @Override
+    public List<Video> findByNameContainingIgnoreCaseAndDescriptionContainingIgnoreCaseOrderByName(String name, String description) {
+        return repo.findByNameContainingIgnoreCaseAndDescriptionContainingIgnoreCaseOrderByName(name, description);
+    }
+
+    @Override
+    public List<Video> findTop20ByNameContainingIgnoreCaseOrderByNameAsc(String name) {
+        return repo.findTop20ByNameContainingIgnoreCaseOrderByNameAsc(name);
+    }
+
     List<Category> getListDataCategory(String[] arr){
         List<Category> list = new ArrayList<>();
         if(arr.length == 0){
@@ -229,8 +245,6 @@ public class VideoServicesImpl implements VideoServices {
                 }
             }
         }
-
-
         return datas;
     }
 }
