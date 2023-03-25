@@ -4,11 +4,16 @@ import javax.persistence.*;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Data
-public class Pengguna {
+@Table(name = "Pengguna")
+public class Pengguna implements Serializable {
+
+    private static final long serialVersionUID=1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

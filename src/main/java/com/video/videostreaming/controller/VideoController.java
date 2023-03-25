@@ -212,4 +212,12 @@ public class VideoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> searching(
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "") String description,
+            Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(videoServices.findSpecification(name, description, pageable));
+    }
 }

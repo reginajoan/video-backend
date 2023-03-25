@@ -34,6 +34,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         // TODO Auto-generated method stub
         try {
+            log.info("request : {}", request);
             String jwt = parseJwt(request);
             log.info("jwt : {}",jwt);
             if(jwt != null && jwtUtils.validateJwtToken(jwt)){
@@ -46,12 +47,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             log.error("Gagal: {}", e.getMessage());
         }
-
         filterChain.doFilter(request, response);
     }
-
     private String parseJwt(HttpServletRequest request){
         String headerAuth = request.getHeader("Authorization");
+        log.info("headerAuth : {}", headerAuth);
         if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")){
             return headerAuth.substring(7, headerAuth.length());
         }

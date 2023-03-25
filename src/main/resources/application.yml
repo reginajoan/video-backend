@@ -1,0 +1,28 @@
+jwt:
+  expirationMs: 3600000
+  refreshExpirationMs: 360000000
+  secret: qqaadsasdsdsdsdswwe
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      enabled: 'true'
+      max-request-size: 1000MB
+  datasource:
+    password: 1234
+    username: root
+    url: jdbc:mysql://localhost:3306/video-streaming?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+app:
+  file:
+    upload-dir: ./src/main/resources/video
+server:
+  port: 1010
+  error:
+    include-message: always

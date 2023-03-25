@@ -24,6 +24,4 @@ public class Category implements Serializable {
 
     @Column(unique = true, nullable = false)
     private String secureId;
-    
-
 }
